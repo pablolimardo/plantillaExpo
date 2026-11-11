@@ -1,0 +1,272 @@
+/* =========================================================
+   ESTILOS · Web del proyecto Expotécnica
+   Mobile first: primero el celular, después pantallas grandes
+   ========================================================= */
+
+/* 1) VARIABLES: la paleta de tu proyecto */
+:root {
+  --fondo: #0b1020;
+  --superficie: #141b33;
+  --texto: #e8eefc;
+  --texto-suave: #9aa6c4;
+  --acento: #00c8ff;
+  --ok: #00e38c;
+  --alerta: #ff4d6d;
+  --radio: 14px;
+  --espacio: clamp(1rem, 3vw, 2rem);  /* espacio que crece con la pantalla */
+  color-scheme: dark;
+}
+
+/* Tema claro: lo activa el botón 🌓 desde app.js */
+[data-tema="claro"] {
+  --fondo: #f3f6fb;
+  --superficie: #ffffff;
+  --texto: #10182b;
+  --texto-suave: #4b5870;
+  --acento: #0077b6;
+  color-scheme: light;
+}
+
+/* 2) BASE */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: system-ui, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.6;
+  background: var(--fondo);
+  color: var(--texto);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border-radius: var(--radio);
+}
+
+/* 3) CABECERA pegada arriba, armada con grid-template-areas */
+.cabecera {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    "logo tema"
+    "menu menu";          /* en el celu: el menú va en su propia fila */
+  align-items: center;
+  gap: 0.5rem 1rem;
+  padding: 0.75rem var(--espacio);
+  background: color-mix(in srgb, var(--fondo) 85%, transparent);
+  backdrop-filter: blur(10px);  /* efecto vidrio esmerilado */
+  border-bottom: 1px solid color-mix(in srgb, var(--acento) 30%, transparent);
+}
+
+.logo {
+  grid-area: logo;
+  font-weight: 800;
+  color: var(--texto);
+  text-decoration: none;
+}
+
+.menu {
+  grid-area: menu;
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;      /* si no entra, se desliza con el dedo */
+}
+
+.menu a {
+  color: var(--texto-suave);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.menu a:hover { color: var(--acento); }
+
+.btn-tema {
+  grid-area: tema;
+  border: 1px solid var(--texto-suave);
+  background: transparent;
+  color: var(--texto);
+  border-radius: 999px;
+  padding: 0.3rem 0.7rem;
+  cursor: pointer;
+}
+
+/* 4) CONTENIDO */
+main {
+  max-width: 70rem;
+  margin-inline: auto;
+  padding-inline: var(--espacio);
+}
+
+section {
+  padding-block: clamp(2.5rem, 8vw, 5rem);
+  scroll-margin-top: 6rem;   /* que la cabecera no tape el título */
+}
+
+h1 {
+  font-size: clamp(2rem, 7vw, 3.75rem);
+  line-height: 1.1;
+  margin: 0.5rem 0 1rem;
+}
+
+h2 { font-size: clamp(1.5rem, 4vw, 2.25rem); }
+
+.etiqueta { color: var(--acento); font-weight: 700; }
+
+.boton {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.8rem 1.4rem;
+  border-radius: 999px;
+  background: var(--acento);
+  color: #06101f;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 0.2s;
+}
+
+.boton:hover { transform: translateY(-3px); }
+
+.hero {
+  display: grid;
+  gap: var(--espacio);
+  align-items: center;
+}
+
+/* 5) GRILLA MÁGICA: se acomoda sola */
+.grilla {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  gap: var(--espacio);
+}
+
+.tarjeta {
+  container-type: inline-size;  /* la tarjeta se mide a sí misma */
+  background: var(--superficie);
+  border: 1px solid color-mix(in srgb, var(--acento) 20%, transparent);
+  border-radius: var(--radio);
+  padding: 1.25rem;
+}
+
+.tarjeta-in { display: grid; gap: 0.75rem; }
+
+.icono { font-size: 2.5rem; }
+
+@container (min-width: 22rem) {
+  .tarjeta-in { grid-template-columns: auto 1fr; align-items: start; }
+}
+
+.tarjeta h3 { margin: 0; }
+.tarjeta p  { margin: 0.25rem 0 0; color: var(--texto-suave); }
+
+/* 6) PANEL DEL TANQUE */
+.panel {
+  display: grid;
+  gap: var(--espacio);
+  background: var(--superficie);
+  border-radius: var(--radio);
+  padding: var(--espacio);
+}
+
+.tanque {
+  position: relative;
+  width: min(100%, 9rem);
+  height: 14rem;
+  margin-inline: auto;
+  border: 3px solid var(--texto-suave);
+  border-top: none;
+  border-radius: 0 0 var(--radio) var(--radio);
+  overflow: hidden;
+}
+
+.agua {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 50%;
+  background: linear-gradient(var(--acento), #0050a0);
+  transition: height 0.4s ease;   /* el agua sube y baja suave */
+}
+
+.estado { padding: 0.6rem 1rem; border-radius: var(--radio); font-weight: 700; }
+.estado.ok     { background: color-mix(in srgb, var(--ok) 20%, transparent); }
+.estado.alerta { background: color-mix(in srgb, var(--alerta) 25%, transparent); }
+.estado.lleno  { background: color-mix(in srgb, var(--acento) 25%, transparent); }
+
+input[type="range"] { width: 100%; accent-color: var(--acento); }
+
+/* 7) IMÁGENES CON EPÍGRAFE */
+figure { margin: var(--espacio) 0; }
+
+figcaption {
+  margin-top: 0.5rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--texto-suave);
+}
+
+.hero img {
+  aspect-ratio: 4 / 3;
+  object-fit: cover;   /* recorta como un portarretratos, sin deformar */
+}
+
+/* MATERIALES Y EQUIPO */
+.materiales {
+  display: grid;
+  gap: var(--espacio);
+  align-items: center;
+}
+
+.materiales figure {
+  margin: 0 auto;
+  max-width: 22rem;
+}
+.lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  gap: 0.5rem 2rem;
+}
+
+.persona { text-align: center; }
+
+.avatar {
+  width: 6rem;
+  aspect-ratio: 1;           /* siempre cuadrado */
+  margin: 0 auto 0.75rem;
+  display: grid;
+  place-items: center;
+  font-size: 3rem;
+  border-radius: 50%;
+  background: var(--fondo);
+}
+
+.pie {
+  text-align: center;
+  padding: 2rem var(--espacio);
+  color: var(--texto-suave);
+  border-top: 1px solid color-mix(in srgb, var(--acento) 20%, transparent);
+}
+
+/* 8) PANTALLAS GRANDES (desde 48rem ≈ 768px) */
+@media (min-width: 48rem) {
+  .cabecera {
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas: "logo menu tema";   /* todo en una fila */
+  }
+  .menu { justify-content: flex-end; }
+  .hero  { grid-template-columns: 1.2fr 1fr; }
+  .panel { grid-template-columns: 10rem 1fr; align-items: center; }
+  .materiales { grid-template-columns: 1fr 1.4fr; }
+}
+
+/* 9) Accesibilidad: si la persona pidió menos animaciones */
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+  html { scroll-behavior: auto; }
+}
